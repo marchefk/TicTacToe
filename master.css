@@ -1,0 +1,73 @@
+#mainContainer {
+    width: 336px;
+    height: 356px;
+    padding: 0;
+    margin-top: 30px;
+    text-align: center;
+    font-family: 'Indie Flower', cursive;
+}
+
+#boardContainer {
+    background-color: black;
+    width: 336px;
+    height: 336px;
+}
+
+#askContainer {
+    background-color: white;
+    color: black;
+    height: 360px;
+    padding: 120px 0px 0px 0px;
+    font-size: 3em;
+}
+
+#oButton, #xButton {
+    font-size: 50px;
+}
+
+.btn {
+    background-color: white;
+}
+
+.btn:hover {
+    color: rgb(99, 200, 121);
+}
+#playAgainButton:hover {
+  color: rgb(99, 200, 121);
+}
+#playAgainButton {
+    margin: 10px;
+    font-size: 25px;
+    /*color: rgb(99, 200, 121);*/
+    color: black;
+    border: 0;
+}
+
+#msgContainer {
+    background-color: white;
+    color: black;
+    font-size: 2em;
+}
+
+.dcon {
+    background-color: white;
+    color: black;
+    width: 110px;
+    height: 110px;
+    margin-right: 3px;
+    margin-bottom: 3px;
+    font-size: 6em;
+}
+
+#d2, #d5, #d8 {
+    margin-right: 0;
+}
+
+.hide {
+    display: none;
+}
+
+.green {
+    /*text-shadow: 0 0 15px rgb(0, 212, 21);*/
+    color: rgb(99, 200, 121);
+}
