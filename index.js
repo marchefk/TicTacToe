@@ -126,33 +126,33 @@ function isCurrentPlayer(x) {
     return x.innerHTML === currentPlayer;
 }
 
-function match() {
-    for (var c = 0; c < matchArray.length; c++) {
-        let currClass = document.getElementsByClassName(matchArray[c]);
-        let arr = [];
-        for (var a = 0; a < currClass.length; a++) {
-            arr.push(currClass[a]);
-        }
-        if (arr.every(isCurrentPlayer)) {
-            for (var m = 0; m < arr.length; m++) {
-                arr[m].classList.add("green");
-            }
-            return true;
-        }
-    }
-    return false;
-}
+let hasAWinner = () => {
+  const rows = [
+    ['d0', 'd1', 'd2'],
+    ['d3', 'd4', 'd5'],
+    ['d6', 'd7', 'd8'],
+    ['d0', 'd3', 'd6'],
+    ['d1', 'd4', 'd7'],
+    ['d2', 'd5', 'd8'],
+    ['d0', 'd4', 'd8'],
+    ['d2', 'd4', 'd6']
+  ];
+  for (let i = 0; i < rows.length; i++) {
+    let elements = rows[i].map(el => document.getElementById(el));
+    let [x, y, z] = elements;
 
-function hasAWinner() {
-    if (match()) {
-        for (var l = 0; l < dContainer.length; l++) {
-            if (dContainer[l].classList.contains("empty")) {
-                dContainer[l].classList.remove("empty");
-            }
+    if (x.innerHTML && y.innerHTML && z.innerHTML &&
+      x.innerHTML === y.innerHTML &&
+      x.innerHTML === z.innerHTML) {
+        elements.forEach(e => e.classList.add("green"));
+        for (let i = 0; i < dContainer.length; i++){
+          if (dContainer[i].classList.contains("empty")){
+            dContainer[i].classList.remove("empty");
+          }
         }
-        playAgain.classList.remove("hide");
-        return true;
-    } else {
-        return false;
+      playAgain.classList.remove("hide");
+      return x.innerHTML;
     }
+  }
+  return false;
 }
