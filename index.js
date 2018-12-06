@@ -1,131 +1,123 @@
-let mainContainer = document.getElementById('mainContainer');
 let msgContainer = document.getElementById('msgContainer');
-let boardContainer = document.getElementById('boardContainer');
-let dContainer = document.getElementsByClassName('dcon');
-let chosenPlayer;
-let random;
-let available;
 let currentPlayer = "X";
 let askContainer = document.getElementById('askContainer');
-askContainer.innerHTML = 'Choose a player. </br>';
-let oButton = document.createElement('button');
-let xButton = document.createElement('button');
-oButton.id = "oButton";
-xButton.id = "xButton";
-askContainer.appendChild(oButton);
-askContainer.appendChild(xButton);
-oButton.innerHTML = 'O';
-xButton.innerHTML = 'X';
-let playAgain = document.getElementById('playAgain');
-let playAgainButton = document.createElement('button');
-playAgainButton.id = ("playAgainButton");
-playAgain.appendChild(playAgainButton);
-playAgainButton.innerHTML = "Play Again";
-let matchArray = ["row1", "row2", "row3", "col1", "col2", "col3", "cr1", "cr2"];
-let allButtons = document.getElementsByTagName("button");
-for (var b = 0; b < allButtons.length; b++) {
-    allButtons[b].classList.add("btn");
-}
+let available;
+let dContainer = document.getElementsByClassName('dcon');
 
-oButton.onclick = function() {
-    chosenPlayer = "O";
-    play();
-}
+// prepare the board
+let boardContainer = document.getElementById('boardContainer');
+(() => {
+  for (let i = 0; i < 9; i++) {
+    let div = document.createElement("div");
+    div.id = `d${i}`;
+    div.classList.add("dcon", "col-xs-4", "empty");
+    boardContainer.appendChild(div);
+  }
+})();
 
-xButton.onclick = function() {
-    chosenPlayer = "X";
-    play();
-}
 
-playAgainButton.onclick = function() {
-    for (var k = 0; k < dContainer.length; k++) {
-        dContainer[k].innerHTML = "";
-        dContainer[k].classList.add("empty");
-        if (dContainer[k].classList.contains("green")) {
-            dContainer[k].classList.remove("green");
-        }
-    }
-    boardContainer.className = "hide";
-    askContainer.classList.remove("hide");
-    playAgain.className = "hide";
-    msgContainer.innerHTML = "";
-}
-
-function computersMove() {
-        available = document.getElementsByClassName("empty");
-        random = Math.floor(Math.random() * available.length);
-        available[random].innerHTML = currentPlayer;
-        available[random].classList.remove("empty");
-        if (hasAWinner()) {
-            msgContainer.innerHTML = "Computer won!";
-        } else {
-            if (hasEmptySpace()) {
-                togglePlayer();
-                playersMove();
-            } else {
-                msgContainer.innerHTML = "No winner";
-                playAgain.classList.remove("hide");
-            }
-        }
-
-}
-
-function play() {
+// choosing the symbol to play (x or o) and starting the game
+let chosenPlayer;
+let symbolButtons = document.getElementsByClassName("chooseSymbol");
+for (let i = 0; i < symbolButtons.length; i++) {
+  symbolButtons[i].onclick = () => {
+    chosenPlayer = symbolButtons[i].innerHTML;
     askContainer.className = "hide";
     boardContainer.classList.remove("hide");
     if (currentPlayer === chosenPlayer) {
+      playersMove();
+    } else {
+      computersMove();
+    }
+  };
+}
+
+// play again action
+let playAgain = document.getElementById('playAgain');
+let playAgainButton = document.getElementById("playAgainButton");
+
+playAgainButton.onclick = function() {
+  for (var k = 0; k < dContainer.length; k++) {
+    dContainer[k].innerHTML = "";
+    dContainer[k].classList.add("empty");
+    if (dContainer[k].classList.contains("green")) {
+      dContainer[k].classList.remove("green");
+    }
+  }
+  boardContainer.className = "hide";
+  askContainer.classList.remove("hide");
+  playAgain.className = "hide";
+  msgContainer.innerHTML = "";
+};
+
+//computer's move
+let computersMove = () => {
+  msgContainer.innerHTML = "Computer's move";
+  available = document.getElementsByClassName("empty");
+  for (let i = 0; i < 9; i++){
+    dContainer[i].removeEventListener("click", enableClick);
+  }
+  let random = Math.floor(Math.random() * available.length);
+  setTimeout(() => {
+    available[random].innerHTML = currentPlayer;
+    available[random].classList.remove("empty");
+    if (hasAWinner()) {
+      msgContainer.innerHTML = "Computer won!";
+    } else {
+      continueGame();
+    }
+  }, 1000);
+};
+
+// callback function for clicking on empty spaces
+let enableClick = function() {
+    this.innerHTML = chosenPlayer;
+    this.classList.remove("empty");
+    if (hasAWinner()) {
+      msgContainer.innerHTML = "You won!";
+    } else {
+      continueGame();
+    }
+
+};
+
+// player's move
+let playersMove = () => {
+  msgContainer.innerHTML = "Your move";
+  let available = document.getElementsByClassName("empty");
+  for (let i = 0; i < available.length; i++) {
+    available[i].addEventListener("click", enableClick);
+  }
+};
+
+// check for empty space and if the game can continue, continue the game
+let continueGame = () => {
+  for (let i = 0; i < 9; i++) {
+    if (document.getElementById(`d${i}`).classList.contains("empty")) {
+      togglePlayer();
+      if (currentPlayer === chosenPlayer){
         playersMove();
-    } else {
-        msgContainer.innerHTML = "Computer's move";
+        return;
+      } else {
         computersMove();
+        return;
+      }
     }
-}
+  }
+  msgContainer.innerHTML = "No winner";
+  playAgain.classList.remove("hide");
+};
 
-function playersMove() {
-    msgContainer.innerHTML = "Your move";
-    for (var i = 0; i < 9; i++) {
-        dContainer[i].addEventListener("click", function() {
-            if (this.classList.contains("empty")) {
-                this.innerHTML = chosenPlayer;
-                this.classList.remove("empty");
-                if (hasAWinner()) {
-                    msgContainer.innerHTML = "You won!";
-                } else {
-                    if (hasEmptySpace()) {
-                        togglePlayer();
-                        msgContainer.innerHTML = "Computer's move";
-                        computersMove();
-                    } else {
-                        msgContainer.innerHTML = "No winner";
-                        playAgain.classList.remove("hide");
-                    }
-                }
-            }
-        })
-    }
-}
+// change the current symbol
+let togglePlayer = () => {
+  if (currentPlayer === "X") {
+    currentPlayer = "O";
+  } else {
+    currentPlayer = "X";
+  }
+};
 
-function hasEmptySpace() {
-    for (var i = 0; i < 9; i++) {
-        if (document.getElementById(`d${i}`).classList.contains("empty")) {
-            return true;
-        }
-    }
-    return false;
-}
-
-function togglePlayer() {
-    if (currentPlayer === "X") {
-        currentPlayer = "O";
-    } else {
-        currentPlayer = "X";
-    }
-}
-
-function isCurrentPlayer(x) {
-    return x.innerHTML === currentPlayer;
-}
-
+// check if there is a winner
 let hasAWinner = () => {
   const rows = [
     ['d0', 'd1', 'd2'],
@@ -144,15 +136,16 @@ let hasAWinner = () => {
     if (x.innerHTML && y.innerHTML && z.innerHTML &&
       x.innerHTML === y.innerHTML &&
       x.innerHTML === z.innerHTML) {
-        elements.forEach(e => e.classList.add("green"));
-        for (let i = 0; i < dContainer.length; i++){
-          if (dContainer[i].classList.contains("empty")){
-            dContainer[i].classList.remove("empty");
-          }
+      elements.forEach(e => e.classList.add("green"));
+      for (let i = 0; i < dContainer.length; i++) {
+        if (dContainer[i].classList.contains("empty")) {
+          dContainer[i].classList.remove("empty");
+          dContainer[i].removeEventListener("click", enableClick);
         }
+      }
       playAgain.classList.remove("hide");
       return x.innerHTML;
     }
   }
   return false;
-}
+};

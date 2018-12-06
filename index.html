@@ -9,20 +9,17 @@
 </head>
 <body>
     <div class="container" id="mainContainer">
-      <div id="askContainer"></div>
+      <div id="askContainer">
+        <p>Choose a player.</p>
+        <button id="oButton" class="btn chooseSymbol">O</button>
+        <button id="xButton" class="btn chooseSymbol">X</button>
+      </div>
       <div id="msgContainer"></div>
       <div id="boardContainer" class="hide">
-        <div id="d0" class="dcon col-xs-4 empty"></div>
-        <div id="d1" class="dcon col-xs-4 empty"></div>
-        <div id="d2" class="dcon col-xs-4 empty"></div>
-        <div id="d3" class="dcon col-xs-4 empty"></div>
-        <div id="d4" class="dcon col-xs-4 empty"></div>
-        <div id="d5" class="dcon col-xs-4 empty"></div>
-        <div id="d6" class="dcon col-xs-4 empty"></div>
-        <div id="d7" class="dcon col-xs-4 empty"></div>
-        <div id="d8" class="dcon col-xs-4 empty"></div>
       </div>
-      <div id="playAgain" class="hide"></div>
+      <div id="playAgain" class="hide">
+        <button id="playAgainButton" class="btn">Play Again</button>
+      </div>
     </div>
     <script type="text/javascript" src="index.js" charset="utf-8"></script>
 </body>
