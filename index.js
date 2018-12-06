@@ -1,11 +1,11 @@
-let msgContainer = document.getElementById('msgContainer');
+let msgContainer = document.getElementById('msg_container');
 let currentPlayer = "X";
-let askContainer = document.getElementById('askContainer');
+let askContainer = document.getElementById('ask_container');
 let available;
 let dContainer = document.getElementsByClassName('dcon');
 
 // prepare the board
-let boardContainer = document.getElementById('boardContainer');
+let boardContainer = document.getElementById('board_container');
 (() => {
   for (let i = 0; i < 9; i++) {
     let div = document.createElement("div");
@@ -18,7 +18,7 @@ let boardContainer = document.getElementById('boardContainer');
 
 // choosing the symbol to play (x or o) and starting the game
 let chosenPlayer;
-let symbolButtons = document.getElementsByClassName("chooseSymbol");
+let symbolButtons = document.getElementsByClassName("choose-symbol");
 for (let i = 0; i < symbolButtons.length; i++) {
   symbolButtons[i].onclick = () => {
     chosenPlayer = symbolButtons[i].innerHTML;
@@ -33,8 +33,8 @@ for (let i = 0; i < symbolButtons.length; i++) {
 }
 
 // play again action
-let playAgain = document.getElementById('playAgain');
-let playAgainButton = document.getElementById("playAgainButton");
+let playAgain = document.getElementById('play_again');
+let playAgainButton = document.getElementById("play_again_button");
 
 playAgainButton.onclick = function() {
   for (var k = 0; k < dContainer.length; k++) {

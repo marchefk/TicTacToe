@@ -1,73 +1,97 @@
-#mainContainer {
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+.main-container {
+  width: 80%;
+  padding: 0;
+  margin-top: 30px;
+  text-align: center;
+  font-family: 'Indie Flower', cursive;
+}
+
+@media (min-width: 992px) {
+  .main-container {
     width: 336px;
     height: 356px;
-    padding: 0;
-    margin-top: 30px;
-    text-align: center;
-    font-family: 'Indie Flower', cursive;
+  }
 }
 
-#boardContainer {
-    background-color: black;
-    width: 336px;
-    height: 336px;
-}
-
-#askContainer {
-    background-color: white;
-    color: black;
-    height: 360px;
-    padding: 120px 0px 0px 0px;
-    font-size: 3em;
-}
-
-#oButton, #xButton {
-    font-size: 50px;
+.ask-container {
+  background-color: white;
+  color: black;
+  height: 360px;
+  padding: 120px 0px 0px 0px;
+  font-size: 3em;
 }
 
 .btn {
-    background-color: white;
+  background-color: white;
 }
 
 .btn:hover {
-    color: rgb(99, 200, 121);
-}
-#playAgainButton:hover {
   color: rgb(99, 200, 121);
 }
-#playAgainButton {
-    margin: 10px;
-    font-size: 25px;
-    /*color: rgb(99, 200, 121);*/
-    color: black;
-    border: 0;
+
+.choose-symbol {
+  font-size: 50px;
 }
 
-#msgContainer {
-    background-color: white;
-    color: black;
-    font-size: 2em;
+.board-container {
+  background-color: black;
+  width: 600px;
+  height: 600px;
+  margin: auto;
+}
+
+@media (min-width: 992px) {
+  .board-container {
+    width: 336px;
+    height: 336px;
+  }
 }
 
 .dcon {
-    background-color: white;
-    color: black;
+  background-color: white;
+  color: black;
+  width: 33%;
+  height: 33%;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  font-size: 10em;
+}
+
+@media (min-width: 992px){
+  .dcon {
     width: 110px;
     height: 110px;
-    margin-right: 3px;
-    margin-bottom: 3px;
-    font-size: 6em;
+    font-size: 6em
+  }
 }
 
 #d2, #d5, #d8 {
-    margin-right: 0;
+  margin-right: 0;
+}
+
+.play-again-button {
+  margin: 10px;
+  font-size: 2em;
+  color: black;
+  border: 0;
+}
+
+.msg-container {
+  background-color: white;
+  color: black;
+  font-size: 2em;
+  padding-bottom: 3%;
 }
 
 .hide {
-    display: none;
+  display: none;
 }
 
 .green {
-    /*text-shadow: 0 0 15px rgb(0, 212, 21);*/
-    color: rgb(99, 200, 121);
+  color: rgb(99, 200, 121);
 }
