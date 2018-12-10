@@ -109,7 +109,7 @@ let computersMove = () => {
   for (let i = 0; i < 9; i++) {
     dContainer[i].removeEventListener("click", enableClick);
   }
-  let chosenID = computersAI(available, dContainer);
+  let chosenID = getComputersResponse(available, dContainer);
   setTimeout(() => {
     document.getElementById(chosenID).innerHTML = currentPlayer;
     document.getElementById(chosenID).classList.remove("empty");
@@ -193,7 +193,7 @@ let hasAWinner = () => {
   return false;
 };
 
-let computersAI = (available, dcon) => {
+let getComputersResponse = (available, dcon) => {
   let dconArray = Array.from(dcon);
   let board = dconArray.map(el => el.innerHTML);
   if (available.length === 9) {
@@ -214,7 +214,8 @@ let computersAI = (available, dcon) => {
     if (board[4] === chosenPlayer) {
       return "d8";
     }
-    if (board[3] === chosenPlayer || board[4] === chosenPlayer) {
+    if (board[3] === chosenPlayer || board[4] === chosenPlayer ||
+      board[6] === chosenPlayer) {
       return "d2";
     }
   }
