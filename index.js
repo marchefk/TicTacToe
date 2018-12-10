@@ -3,6 +3,58 @@ let currentPlayer = "X";
 let askContainer = document.getElementById('ask_container');
 let available;
 let dContainer = document.getElementsByClassName('dcon');
+const rows = [
+  ['d0', 'd1', 'd2'],
+  ['d3', 'd4', 'd5'],
+  ['d6', 'd7', 'd8'],
+  ['d0', 'd3', 'd6'],
+  ['d1', 'd4', 'd7'],
+  ['d2', 'd5', 'd8'],
+  ['d0', 'd4', 'd8'],
+  ['d2', 'd4', 'd6']
+];
+
+const rows2 = [{
+    first: 'd0',
+    second: 'd1',
+    third: 'd2'
+  },
+  {
+    first: 'd3',
+    second: 'd4',
+    third: 'd5'
+  },
+  {
+    first: 'd6',
+    second: 'd7',
+    third: 'd8'
+  },
+  {
+    first: 'd0',
+    second: 'd3',
+    third: 'd6'
+  },
+  {
+    first: 'd1',
+    second: 'd4',
+    third: 'd7'
+  },
+  {
+    first: 'd2',
+    second: 'd5',
+    third: 'd8'
+  },
+  {
+    first: 'd0',
+    second: 'd4',
+    third: 'd8'
+  },
+  {
+    first: 'd2',
+    second: 'd4',
+    third: 'd6'
+  }
+];
 
 // prepare the board
 let boardContainer = document.getElementById('board_container');
@@ -22,7 +74,7 @@ let symbolButtons = document.getElementsByClassName("choose-symbol");
 for (let i = 0; i < symbolButtons.length; i++) {
   symbolButtons[i].onclick = () => {
     chosenPlayer = symbolButtons[i].innerHTML;
-    askContainer.className = "hide";
+    askContainer.classList.add("hide");
     boardContainer.classList.remove("hide");
     if (currentPlayer === chosenPlayer) {
       playersMove();
@@ -44,9 +96,9 @@ playAgainButton.onclick = function() {
       dContainer[k].classList.remove("green");
     }
   }
-  boardContainer.className = "hide";
+  boardContainer.classList.add("hide");
   askContainer.classList.remove("hide");
-  playAgain.className = "hide";
+  playAgain.classList.add("hide");
   msgContainer.innerHTML = "";
 };
 
@@ -54,13 +106,13 @@ playAgainButton.onclick = function() {
 let computersMove = () => {
   msgContainer.innerHTML = "Computer's move";
   available = document.getElementsByClassName("empty");
-  for (let i = 0; i < 9; i++){
+  for (let i = 0; i < 9; i++) {
     dContainer[i].removeEventListener("click", enableClick);
   }
-  let random = Math.floor(Math.random() * available.length);
+  let chosenID = computersAI(available, dContainer);
   setTimeout(() => {
-    available[random].innerHTML = currentPlayer;
-    available[random].classList.remove("empty");
+    document.getElementById(chosenID).innerHTML = currentPlayer;
+    document.getElementById(chosenID).classList.remove("empty");
     if (hasAWinner()) {
       msgContainer.innerHTML = "Computer won!";
     } else {
@@ -71,13 +123,13 @@ let computersMove = () => {
 
 // callback function for clicking on empty spaces
 let enableClick = function() {
-    this.innerHTML = chosenPlayer;
-    this.classList.remove("empty");
-    if (hasAWinner()) {
-      msgContainer.innerHTML = "You won!";
-    } else {
-      continueGame();
-    }
+  this.innerHTML = chosenPlayer;
+  this.classList.remove("empty");
+  if (hasAWinner()) {
+    msgContainer.innerHTML = "You won!";
+  } else {
+    continueGame();
+  }
 
 };
 
@@ -95,7 +147,7 @@ let continueGame = () => {
   for (let i = 0; i < 9; i++) {
     if (document.getElementById(`d${i}`).classList.contains("empty")) {
       togglePlayer();
-      if (currentPlayer === chosenPlayer){
+      if (currentPlayer === chosenPlayer) {
         playersMove();
         return;
       } else {
@@ -119,19 +171,10 @@ let togglePlayer = () => {
 
 // check if there is a winner
 let hasAWinner = () => {
-  const rows = [
-    ['d0', 'd1', 'd2'],
-    ['d3', 'd4', 'd5'],
-    ['d6', 'd7', 'd8'],
-    ['d0', 'd3', 'd6'],
-    ['d1', 'd4', 'd7'],
-    ['d2', 'd5', 'd8'],
-    ['d0', 'd4', 'd8'],
-    ['d2', 'd4', 'd6']
-  ];
   for (let i = 0; i < rows.length; i++) {
     let elements = rows[i].map(el => document.getElementById(el));
     let [x, y, z] = elements;
+    let [a, b, c] = [x.innerHTML, y.innerHTML, z.innerHTML];
 
     if (x.innerHTML && y.innerHTML && z.innerHTML &&
       x.innerHTML === y.innerHTML &&
@@ -148,4 +191,89 @@ let hasAWinner = () => {
     }
   }
   return false;
+};
+
+let computersAI = (available, dcon) => {
+  let dconArray = Array.from(dcon);
+  let board = dconArray.map(el => el.innerHTML);
+  if (available.length === 9) {
+    return "d0";
+  }
+  if (available.length === 8) {
+    if (board[4] === "") {
+      return "d4";
+    }
+    return "d0";
+  }
+  if (available.length === 7) {
+    if (board[1] === chosenPlayer || board[2] === chosenPlayer ||
+      board[5] === chosenPlayer || board[7] === chosenPlayer ||
+      board[8] === chosenPlayer) {
+      return "d6";
+    }
+    if (board[4] === chosenPlayer) {
+      return "d8";
+    }
+    if (board[3] === chosenPlayer || board[4] === chosenPlayer) {
+      return "d2";
+    }
+  }
+  if (available.length <= 6) {
+    let id = "";
+    for (let i = 0; i < rows2.length; i++) {
+      let row = rows2[i];
+      let first = document.getElementById(row.first);
+      let second = document.getElementById(row.second);
+      let third = document.getElementById(row.third);
+      id = compareElements(first, second, third, currentPlayer);
+      if (id) {
+        return id;
+      }
+    }
+    for (let i = 0; i < rows2.length; i++) {
+      let row = rows2[i];
+      let first = document.getElementById(row.first);
+      let second = document.getElementById(row.second);
+      let third = document.getElementById(row.third);
+      id = compareElements(first, second, third);
+      if (id) {
+        return id;
+      }
+    }
+
+    if (board[8] === "") {
+      return "d8";
+    }
+    if (board[6] === "") {
+      return "d6";
+    }
+    if (board[2] === "") {
+      return "d2";
+    }
+    if (board[1] === "") {
+      return "d1";
+    }
+    if (board[0] === "") {
+      return "d0";
+    }
+  }
+};
+
+let compareElements = (a, b, c, player) => {
+  let [aIH, bIH, cIH] = [a.innerHTML, b.innerHTML, c.innerHTML];
+  if (aIH && bIH && aIH === bIH && c.classList.contains("empty")) {
+    if ((player && aIH === player) || !player) {
+      return c.id;
+    }
+  }
+  if (aIH && cIH && aIH === cIH && b.classList.contains("empty")) {
+    if ((player && aIH === player) || !player) {
+      return b.id;
+    }
+  }
+  if (bIH && cIH && bIH === cIH && a.classList.contains("empty")) {
+    if ((player && bIH === player) || !player) {
+      return a.id;
+    }
+  }
 };
