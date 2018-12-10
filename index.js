@@ -3,57 +3,16 @@ let currentPlayer = "X";
 let askContainer = document.getElementById('ask_container');
 let available;
 let dContainer = document.getElementsByClassName('dcon');
-const rows = [
-  ['d0', 'd1', 'd2'],
-  ['d3', 'd4', 'd5'],
-  ['d6', 'd7', 'd8'],
-  ['d0', 'd3', 'd6'],
-  ['d1', 'd4', 'd7'],
-  ['d2', 'd5', 'd8'],
-  ['d0', 'd4', 'd8'],
-  ['d2', 'd4', 'd6']
-];
 
-const rows2 = [{
-    first: 'd0',
-    second: 'd1',
-    third: 'd2'
-  },
-  {
-    first: 'd3',
-    second: 'd4',
-    third: 'd5'
-  },
-  {
-    first: 'd6',
-    second: 'd7',
-    third: 'd8'
-  },
-  {
-    first: 'd0',
-    second: 'd3',
-    third: 'd6'
-  },
-  {
-    first: 'd1',
-    second: 'd4',
-    third: 'd7'
-  },
-  {
-    first: 'd2',
-    second: 'd5',
-    third: 'd8'
-  },
-  {
-    first: 'd0',
-    second: 'd4',
-    third: 'd8'
-  },
-  {
-    first: 'd2',
-    second: 'd4',
-    third: 'd6'
-  }
+const rows = [
+  { first: 'd0', second: 'd1', third: 'd2' },
+  { first: 'd3', second: 'd4', third: 'd5' },
+  { first: 'd6', second: 'd7', third: 'd8' },
+  { first: 'd0', second: 'd3', third: 'd6' },
+  { first: 'd1', second: 'd4', third: 'd7' },
+  { first: 'd2', second: 'd5', third: 'd8' },
+  { first: 'd0', second: 'd4', third: 'd8' },
+  { first: 'd2', second: 'd4', third: 'd6' }
 ];
 
 // prepare the board
@@ -172,7 +131,7 @@ let togglePlayer = () => {
 // check if there is a winner
 let hasAWinner = () => {
   for (let i = 0; i < rows.length; i++) {
-    let elements = rows[i].map(el => document.getElementById(el));
+    let elements = Object.values(rows[i]).map(el => document.getElementById(el));
     let [x, y, z] = elements;
     let [a, b, c] = [x.innerHTML, y.innerHTML, z.innerHTML];
 
@@ -207,22 +166,21 @@ let getComputersResponse = (available, dcon) => {
   }
   if (available.length === 7) {
     if (board[1] === chosenPlayer || board[2] === chosenPlayer ||
-      board[5] === chosenPlayer || board[7] === chosenPlayer ||
-      board[8] === chosenPlayer) {
+      board[5] === chosenPlayer || board[8] === chosenPlayer) {
       return "d6";
     }
     if (board[4] === chosenPlayer) {
       return "d8";
     }
-    if (board[3] === chosenPlayer || board[4] === chosenPlayer ||
+    if (board[3] === chosenPlayer || board[7] === chosenPlayer ||
       board[6] === chosenPlayer) {
       return "d2";
     }
   }
   if (available.length <= 6) {
     let id = "";
-    for (let i = 0; i < rows2.length; i++) {
-      let row = rows2[i];
+    for (let i = 0; i < rows.length; i++) {
+      let row = rows[i];
       let first = document.getElementById(row.first);
       let second = document.getElementById(row.second);
       let third = document.getElementById(row.third);
@@ -231,8 +189,8 @@ let getComputersResponse = (available, dcon) => {
         return id;
       }
     }
-    for (let i = 0; i < rows2.length; i++) {
-      let row = rows2[i];
+    for (let i = 0; i < rows.length; i++) {
+      let row = rows[i];
       let first = document.getElementById(row.first);
       let second = document.getElementById(row.second);
       let third = document.getElementById(row.third);
